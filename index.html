@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#409EFF" />
+  <title>学校数字简介</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f5f7fa; color: #333; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* 导航 */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.06); z-index: 100; padding: 0 1.5rem; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .navbar .logo { font-size: 1.15rem; font-weight: 700; color: #409EFF; display: flex; align-items: center; gap: 8px; }
+    .navbar .menu { display: flex; gap: 1.2rem; font-size: 0.9rem; }
+    .navbar .menu a { color: #555; transition: color .2s; }
+    .navbar .menu a:hover, .navbar .menu a.active { color: #409EFF; }
+    .navbar .menu-toggle { display: none; font-size: 1.3rem; color: #409EFF; cursor: pointer; }
+
+    /* Hero */
+    .hero { margin-top: 56px; background: linear-gradient(135deg, #409EFF 0%, #66b1ff 100%); color: #fff; padding: 3rem 1.5rem; text-align: center; }
+    .hero h1 { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .hero p { font-size: 1rem; opacity: 0.9; }
+
+    /* 统计 */
+    .stats { padding: 2rem 1.5rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 900px; margin: 0 auto; }
+    .stat-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .stat-card .num { font-size: 1.8rem; font-weight: 700; color: #409EFF; }
+    .stat-card .label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+
+    /* 区块标题 */
+    .section { padding: 2rem 1.5rem; max-width: 900px; margin: 0 auto; }
+    .section-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; color: #333; }
+    .section-title i { color: #409EFF; }
+
+    /* 教师 */
+    .teacher-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .teacher-card { background: #fff; border-radius: 12px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .teacher-card .avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #409EFF, #66b1ff); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .teacher-card .name { font-weight: 600; font-size: 0.95rem; }
+    .teacher-card .subject { font-size: 0.8rem; color: #888; margin-top: 2px; }
+    .teacher-card .desc { font-size: 0.8rem; color: #666; margin-top: 6px; line-height: 1.4; }
+
+    /* 校园风采 */
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .gallery-item { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .gallery-item .img-box { height: 140px; background: #e8f3ff; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .gallery-item .info { padding: 0.8rem; }
+    .gallery-item .info h4 { font-size: 0.9rem; }
+    .gallery-item .info p { font-size: 0.75rem; color: #888; margin-top: 2px; }
+
+    /* 特色 */
+    .feature-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .feature-card { background: #fff; border-radius: 12px; padding: 1rem; display: flex; gap: 0.8rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .feature-card .icon { width: 44px; height: 44px; border-radius: 10px; background: #f0f7ff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .feature-card h4 { font-size: 0.9rem; margin-bottom: 3px; }
+    .feature-card p { font-size: 0.78rem; color: #666; line-height: 1.4; }
+
+    /* 联系 */
+    .contact-box { background: #fff; border-radius: 12px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .contact-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-row i { color: #409EFF; width: 20px; text-align: center; }
+
+    /* 底部 */
+    .footer { text-align: center; padding: 1.5rem; font-size: 0.75rem; color: #aaa; }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      .navbar .menu { display: none; position: absolute; top: 56px; left: 0; right: 0; background: #fff; flex-direction: column; padding: 1rem 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); gap: 0.8rem; }
+      .navbar .menu.open { display: flex; }
+      .navbar .menu-toggle { display: block; }
+      .hero { padding: 2rem 1rem; }
+      .hero h1 { font-size: 1.4rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .teacher-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .feature-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 374px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // ============================================================
+    //  【修改这里】学校数据 — 替换成你的真实信息
+    // ============================================================
+    const schoolData = {
+      schoolName: "阳光中学",
+      heroTitle: "欢迎来到阳光中学",
+      heroSubtitle: "立德树人 · 追求卓越 · 全面发展",
+      stats: [
+        { number: "86", label: "教学班" },
+        { number: "3200", label: "在校学生" },
+        { number: "245", label: "教职工" },
+        { number: "98%", label: "升学率" },
+      ],
+      teachers: [
+        { id: 1, name: "王建国", subject: "数学", title: "高级教师", desc: "从教28年，市级骨干教师，多次获得教学一等奖。" },
+        { id: 2, name: "李秀英", subject: "语文", title: "特级教师", desc: "全国优秀教师，出版教学专著3部，深受学生喜爱。" },
+        { id: 3, name: "张伟",   subject: "物理", title: "高级教师", desc: "物理奥赛金牌教练，指导学生获国家级奖项20余项。" },
+        { id: 4, name: "陈静",   subject: "英语", title: "一级教师", desc: "留学归国，口语教学专家，所带班级英语成绩全区第一。" },
+        { id: 5, name: "刘芳",   subject: "化学", title: "高级教师", desc: "化学实验教学名师，创新实验设计获省级一等奖。" },
+        { id: 6, name: "赵强",   subject: "体育", title: "一级教师", desc: "国家级裁判员，带队获省级运动会团体冠军。" },
+      ],
+      gallery: [
+        { id: 1, icon: "🏫", title: "学校正门",   desc: "雄伟壮观的校门" },
+        { id: 2, icon: "📚", title: "图书馆",     desc: "藏书10万余册" },
+        { id: 3, icon: "🔬", title: "科学实验室", desc: "现代化实验设备" },
+        { id: 4, icon: "🏟️", title: "运动场",     desc: "标准400米跑道" },
+        { id: 5, icon: "🎨", title: "艺术楼",     desc: "音乐美术多功能教室" },
+        { id: 6, icon: "🌳", title: "校园花园",   desc: "四季花开绿意盎然" },
+      ],
+      features: [
+        { icon: "🧪", title: "科技创新教育", desc: "机器人、编程、创客空间，培养学生创新思维与实践能力。" },
+        { icon: "🌍", title: "国际交流",     desc: "与多国学校建立合作关系，定期组织师生互访交流。" },
+        { icon: "🎭", title: "艺术特色",     desc: "合唱团、舞蹈队、美术社，艺术教育成果显著。" },
+        { icon: "⚽", title: "体育强校",     desc: "足球、篮球、田径等传统优势项目，输送多名运动员。" },
+      ],
+      contact: {
+        address: "XX市XX区学府路168号",
+        phone:   "0571-88888888",
+        email:   "contact@school.edu.cn",
+        website: "www.school.edu.cn",
+      }
+    };
+    // ============================================================
+
+    function Navbar() {
+      const [open, setOpen] = useState(false);
+      const items = [
+        { href: "#home",      label: "首页" },
+        { href: "#teachers",   label: "师资" },
+        { href: "#gallery",    label: "校园" },
+        { href: "#features",   label: "特色" },
+        { href: "#contact",    label: "联系" },
+      ];
+      return (
+        <nav className="navbar">
+          <div className="logo">
+            <i className="fas fa-graduation-cap"></i>{schoolData.schoolName}
+          </div>
+          <div className={`menu ${open ? "open" : ""}`}>
+            {items.map(it => (
+              <a key={it.href} href={it.href} onClick={() => setOpen(false)}>{it.label}</a>
+            ))}
+          </div>
+          <div className="menu-toggle" onClick={() => setOpen(!open)}>
+            <i className={`fas ${open ? "fa-times" : "fa-bars"}`}></i>
+          </div>
+        </nav>
+      );
+    }
+
+    function Hero() {
+      return (
+        <section id="home" className="hero">
+          <h1>{schoolData.heroTitle}</h1>
+          <p>{schoolData.heroSubtitle}</p>
+        </section>
+      );
+    }
+
+    function Stats() {
+      return (
+        <section className="stats">
+          <div className="stats-grid">
+            {schoolData.stats.map((s, i) => (
+              <div className="stat-card" key={i}>
+                <div className="num">{s.number}</div>
+                <div className="label">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function SectionTitle({ icon, text }) {
+      return (
+        <h2 className="section-title">
+          <i className={`fas ${icon}`}></i>{text}
+        </h2>
+      );
+    }
+
+    function Teachers() {
+      return (
+        <section id="teachers" className="section">
+          <SectionTitle icon="fa-chalkboard-teacher" text="师资力量" />
+          <div className="teacher-grid">
+            {schoolData.teachers.map(t => (
+              <div className="teacher-card" key={t.id}>
+                <div className="avatar">{t.name[0]}</div>
+                <div className="name">
+                  {t.name}
+                  <span style={{ fontSize:'0.75rem', color:'#409EFF', marginLeft:4 }}>{t.title}</span>
+                </div>
+                <div className="subject">{t.subject}教师</div>
+                <div className="desc">{t.desc}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Gallery() {
+      return (
+        <section id="gallery" className="section">
+          <SectionTitle icon="fa-images" text="校园风采" />
+          <div className="gallery-grid">
+            {schoolData.gallery.map(g => (
+              <div className="gallery-item" key={g.id}>
+                <div className="img-box">{g.icon}</div>
+                <div className="info">
+                  <h4>{g.title}</h4>
+                  <p>{g.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Features() {
+      return (
+        <section id="features" className="section">
+          <SectionTitle icon="fa-star" text="办学特色" />
+          <div className="feature-list">
+            {schoolData.features.map((f, i) => (
+              <div className="feature-card" key={i}>
+                <div className="icon">{f.icon}</div>
+                <div>
+                  <h4>{f.title}</h4>
+                  <p>{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Contact() {
+      const C = schoolData.contact;
+      return (
+        <section id="contact" className="section">
+          <SectionTitle icon="fa-phone-alt" text="联系我们" />
+          <div className="contact-box">
+            <div className="contact-row"><i className="fas fa-map-marker-alt"></i>{C.address}</div>
+            <div className="contact-row"><i className="fas fa-phone"></i>{C.phone}</div>
+            <div className="contact-row"><i className="fas fa-envelope"></i>{C.email}</div>
+            <div className="contact-row"><i className="fas fa-globe"></i>{C.website}</div>
+          </div>
+        </section>
+      );
+    }
+
+    function Footer() {
+      return (
+        <div className="footer">
+          © {new Date().getFullYear()} {schoolData.schoolName} 版权所有
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <>
+          <Navbar />
+          <Hero />
+          <Stats />
+          <Teachers />
+          <Gallery />
+          <Features />
+          <Contact />
+          <Footer />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>
