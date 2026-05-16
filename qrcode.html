@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>扫码访问 - 学校数字简介</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f7fa; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+    .box { background: #fff; border-radius: 16px; padding: 2rem; text-align: center; max-width: 380px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .box h1 { font-size: 1.2rem; color: #333; margin-bottom: 0.5rem; }
+    .box p.sub { color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .qr-wrap { padding: 1rem; background: #fff; border: 1px dashed #ddd; border-radius: 12px; display: inline-block; margin-bottom: 1.5rem; }
+    .qr-wrap img { width: 200px; height: 200px; display: block; }
+    .url-box { background: #f0f7ff; border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem; }
+    .url-box .label { font-size: 0.75rem; color: #888; margin-bottom: 4px; }
+    .url-box .url { font-size: 0.9rem; color: #409EFF; font-weight: 600; word-break: break-all; }
+    .steps { text-align: left; font-size: 0.8rem; color: #666; }
+    .steps li { margin: 6px 0; }
+    .back { display: inline-block; margin-top: 1rem; color: #409EFF; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>📱 扫码访问学校简介</h1>
+    <p class="sub">使用手机浏览器或微信扫一扫</p>
+    <div class="qr-wrap">
+      <img id="qrImg" alt="二维码" />
+    </div>
+    <div class="url-box">
+      <div class="label">访问地址</div>
+      <div class="url" id="urlText"></div>
+    </div>
+    <ol class="steps">
+      <li>打开手机相机或微信扫一扫</li>
+      <li>对准上方二维码扫描</li>
+      <li>点击弹出的链接即可访问</li>
+    </ol>
+    <a class="back" href="/">← 返回学校简介</a>
+  </div>
+  <script>
+    // 自动获取当前局域网地址
+    const url = window.location.origin + '/';
+    document.getElementById('urlText').textContent = url;
+    document.getElementById('qrImg').src =
+      'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(url);
+  </script>
+</body>
+</html>
